@@ -1,0 +1,53 @@
+{% extends 'hod_templates/base_template.html' %}
+{% block page_title %}
+Update Class Details of Class {{ currentClass }}
+{% endblock page_title %}
+{% block main_content %}
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                <!-- general form elements -->
+                <!--Update class details -->
+                <div class="card card-primary">
+                  <div class="card-header">
+                    <h3 class="card-title">Update Class Details of Class</h3>
+                    {% with messages = get_flashed_messages() %}
+                     {% if messages %}
+                        <div class="alert alert-success" role="alert">
+                        {% for message in messages %}
+                          <li>{{ message }}</li>
+                        {% endfor %}
+                        </div>
+                      {% endif %}
+                    {% endwith %}
+                  </div>
+                  <!-- /.card-header -->
+                  <!-- form start -->
+                  <form action="" method="post">i
+			  {% for item in range(3) %}
+			  {{ form.hidden_tag() }}
+                    <div class="card-body">
+                            <div class="form-group">
+				    {{ form.subject.label }}
+				    {{ form.subject(placeholder='Subjct Name', class="form-control")}}
+                            </div>
+                    </div>
+		    	{% endfor %}
+                    <!-- /.card-body -->
+
+                    <div class="card-footer">
+                        <button type="submit" class="btn btn-primary btn-block">Add Staff</button>
+                      <!--<button type="submit" class="btn btn-primary btn-block">Add Staff</button>-->
+                    </div>
+                  </form>
+                </div>
+                  <!-- /.card-header -->
+                <!-- /.card -->
+              </div>
+            </div>
+        </div>
+    </section>
+    <!-- /.content -->
+{% endblock main_content %}
