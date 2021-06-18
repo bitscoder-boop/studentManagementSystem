@@ -1,0 +1,16 @@
+{% extends 'hod_templates/base_template.html' %}
+{% block page_title %}
+Error
+ {% if passForm == true %}
+ 	{% include 'hod_templates/_updateClass.html' %}
+{% endif %}
+{% endblock page_title %}
+{% block main_content %}
+
+{% if message %}
+	<h3>{{ message }}</h3>
+{% endif %}
+<p>The administrator has been notified.Sorry for the incovenience!</p>
+<p><a href="{{url_for('adminHomePage')}}">Home</a></p>
+
+{% endblock %}

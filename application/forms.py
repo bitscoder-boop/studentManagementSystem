@@ -2,7 +2,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, SelectField, DateTimeField, IntegerField, FieldList, FormField
 from wtforms.validators import DataRequired, Optional, EqualTo, Email, NumberRange, InputRequired, ValidationError, Regexp
 from application.models import Staff, Grade
-
+from flask import request 
 
 class LoginForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
@@ -94,7 +94,4 @@ class ManageClassForm(FlaskForm):
         classValueFromDatabase = Grade.query.filter_by(grade_number=value).first()
         if classValueFromDatabase is not None:
             raise ValidationError('Given class is already present in databse.')
-        
 
-class SubjectForm(FlaskForm):
-    subject = StringField('Subject', validators = [DataRequired()])

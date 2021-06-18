@@ -1,6 +1,8 @@
 {% extends 'hod_templates/base_template.html' %}
 {% block page_title %}
 Update Class Details of Class {{ currentClass }}
+{% include 'hod_templates/_searchClass.html' %}
+<!--create drop down menu here with select field-->
 {% endblock page_title %}
 {% block main_content %}
     <!-- Main content -->
@@ -12,36 +14,59 @@ Update Class Details of Class {{ currentClass }}
                 <!--Update class details -->
                 <div class="card card-primary">
                   <div class="card-header">
-                    <h3 class="card-title">Update Class Details of Class</h3>
-                    {% with messages = get_flashed_messages() %}
-                     {% if messages %}
-                        <div class="alert alert-success" role="alert">
-                        {% for message in messages %}
-                          <li>{{ message }}</li>
-                        {% endfor %}
-                        </div>
-                      {% endif %}
-                    {% endwith %}
+			  <h3 class="card-title">Update Class Details of Class {{ className }}</h3>
                   </div>
+                {% with messages = get_flashed_messages(category_filter=['message']) %}
+                     	{% if messages %}
+                        	<div class="alert alert-success alert-dismissible fade show" role="alert">
+                        	{% for message in messages %}
+                          		<li>{{ message }}</li>
+                        	{% endfor %}
+					<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+                        	</div>
+                      	{% endif %}
+                {% endwith %}
                   <!-- /.card-header -->
                   <!-- form start -->
-                  <form action="" method="post">i
-			  {% for item in range(3) %}
-			  {{ form.hidden_tag() }}
+		  <form action="{{ url_for('updateClassDetails', className = currentClass)}}" method="post">
                     <div class="card-body">
-                            <div class="form-group">
-				    {{ form.subject.label }}
-				    {{ form.subject(placeholder='Subjct Name', class="form-control")}}
-                            </div>
+				{% for scount in range(total_subject)%}
+				<hr>
+				<div class="form-row">
+					<div class="form-group col-md-6">
+						<label>Subject</label>
+						<input type='text' placeholder='Subject Name' name= 'subject{{scount|string}}' class= 'form-control' required='required'>
+					</div>
+					<div class="form-group col-md-6">
+						<label> Teacher Name</label>
+						<select class="form-control" id="teacher" name="teacher{{scount|string}}" required=required>
+							<option selected disabled>Select Subject Teacher</option>
+							{% for name in myTeacherList %}	
+							<option value={{ name }}>{{ name }}</option>
+						{% endfor %}
+						</select>
+					</div>
+				</div>
+				<div class="form-group">
+					<label>Market Price</label>
+					<input type="text" placeholder="Price" name="price{{scount|string}}" class="form-control" required="required">
+				</div>
+				<div class="form-group">
+					<label>Publisher</label>
+					<input type="text" placeholder="Publisher" name="publisher{{scount|string}}" class="form-control">
+				</div>
+				<hr>
+				<br>
+				{% endfor %}
                     </div>
-		    	{% endfor %}
-                    <!-- /.card-body -->
-
                     <div class="card-footer">
                         <button type="submit" class="btn btn-primary btn-block">Add Staff</button>
-                      <!--<button type="submit" class="btn btn-primary btn-block">Add Staff</button>-->
                     </div>
-                  </form>
+		    </form>
+                    <!-- /.card-body -->
+
                 </div>
                   <!-- /.card-header -->
                 <!-- /.card -->

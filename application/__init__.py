@@ -12,4 +12,4 @@ migrate = Migrate(app, db)
 login = LoginManager(app)
 
 
-from .import routes, models
+from .import routes, models, errors
