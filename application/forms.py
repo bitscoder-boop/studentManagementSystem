@@ -20,7 +20,7 @@ class AddStudentForm(FlaskForm):
     address = StringField('Address', validators = [DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
     password2 = PasswordField(
-        'Repeat Password', validators=[DataRequired(), EqualTo('password')])
+            'Repeat Password', validators=[DataRequired(), EqualTo('password')])
     current_grade = StringField('Class', validators = [DataRequired()])
     submit = SubmitField('Add Student')
 
@@ -35,7 +35,7 @@ class AddStaffForm(FlaskForm):
     address = StringField('Address', validators = [DataRequired(message = "Enter valid Phone Number")])
     password = PasswordField('Password', validators=[DataRequired()])
     password2 = PasswordField(
-        'Repeat Password', validators=[DataRequired(), EqualTo('password')])
+            'Repeat Password', validators=[DataRequired(), EqualTo('password')])
     class_teacher = StringField('ClassTeacher', validators = [Optional()])
     submit = SubmitField('Add Staff')
 
@@ -86,7 +86,7 @@ class ManageClassForm(FlaskForm):
             raise ValidationError('Teacher not registered. Register it first')
         elif class_teacher.data not in gradeNotassignedList:
             raise ValidationError('Cannot assign class teacher to current class.\nGiven teacher already got class teaching post.')
-            # admin have assigned given teacher to some class as class teacher.
+        # admin have assigned given teacher to some class as class teacher.
 
 
     def validate_grade_number(self, grade_number):

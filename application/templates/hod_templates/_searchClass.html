@@ -1,9 +1,9 @@
 <form action={{ url_for('updateClass')}} method= "POST">
 	<select id="Select" class="form-control" name="searchClass">
-	<option selected disabled>{{currentClass}}</option>
-	{% for data in classList %}
-	<option value={{ data  }}>{{ data }}</option>
-	{% endfor %}
+		<option selected disabled>{{currentClass}}</option>
+		{% for data in classList %}
+		<option value={{ data  }}>{{ data }}</option>
+		{% endfor %}
 	</select>
-<button type="submit" class="btn btn-primary btn-block">Search Class</button>    
+	<button type="submit" class="btn btn-primary btn-block">Search Class</button>    
 </form>                                                                                   

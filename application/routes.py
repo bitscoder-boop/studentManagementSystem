@@ -7,8 +7,9 @@ from flask import render_template, url_for, request, redirect, flash
 
 @app.route('/admin_login', methods=["GET", "POST"])
 def admin_login():
+    '''handle admin login'''
     if request.method == 'POST':
-        admin = Admin.query.filter_by(username=request.form.get('username')).first()
+        admin = Admin.query.filter_by(username=request.form.get('username')).first() # return username if avilable else none
         if admin is None or not admin.check_password(request.form.get('password')):
             flash('Invalid username or password')
             return redirect(url_for('admin_login'))
@@ -33,44 +34,47 @@ def adminHomePage():
 
 @app.route('/add_staff', methods = ['GET', 'POST'])
 def add_staff():
+    '''handle the form that create staff'''
     form = AddStaffForm()
-    if form.validate_on_submit():
+    if form.validate_on_submit(): # csrf token must be avilable 
         user = Staff(
-        first_name = form.first_name.data,
-        middle_name = form.middle_name.data,
-        last_name = form.last_name.data,
-        username = form.username.data,
-        gender = form.gender.data,
-        address = form.address.data,
-        email = form.email.data,
-        contact = int(form.contact.data)
-        )
+                first_name = form.first_name.data,
+                middle_name = form.middle_name.data,
+                last_name = form.last_name.data,
+                username = form.username.data,
+                gender = form.gender.data,
+                address = form.address.data,
+                email = form.email.data,
+                contact = int(form.contact.data)
+                )
         user.set_password(form.password.data)
         if form.class_teacher.data:
             user.assign_classTeaching(form.class_teacher.data)
-        db.session.add(user)
-        db.session.commit()
+        #db.session.add(user) # uncomment on production
+        #db.session.commit()
         flash('Succesfully added staff.')
     return render_template('hod_templates/add_staff_template.html', form=form)
 
 
 @app.route('/manage_class', methods = ['GET', 'POST'])
 def manageClass():
+    '''handle form that assign total subject and class teacher to each class'''
     form = ManageClassForm()
     if form.validate_on_submit():
         value = Grade(
-        grade_number = form.grade_number.data.lower(),
-        total_subject = form.total_subject_count.data,
-        )
+                grade_number = form.grade_number.data.lower(),
+                total_subject = form.total_subject_count.data,
+                )
         if form.class_teacher.data:
             value.assign_classTeacher(form.class_teacher.data)
-        db.session.add(value)
-        db.session.commit()
+        #db.session.add(value) # uncomment in production
+        #db.session.commit()
         flash('Succesfully added class.')
     return render_template('hod_templates/manage_class.html', form=form)
 
 @app.route('/update_class/<className>', methods = ['GET', 'POST'])
 def updateClassDetails(className):
+    '''add subject, subject Teacher to the given class''' 
     TeacherList = [i.username for i in Staff.query.filter_by(grade_subject=None).all()]
     classList = [i.grade_number for i in Grade.query.all()] # get class grade name
     currentClass = className
@@ -81,10 +85,6 @@ def updateClassDetails(className):
         '''if total_subject of current class return error'''
         return render_template('500.html', message="Make sure given class got subject number assigned", passForm = True, classList= classList)
     if request.method == 'POST':
-        subjectList = [] # get the list of subject name from the form
-        subjectTeacherList = []
-        marketPriceList = []
-        publisherNameList = []
         grade = Grade.query.filter_by(grade_number=currentClass).first()
         for i in range(total_subject):
             name = request.form.get('subject' +str(i))
@@ -92,17 +92,18 @@ def updateClassDetails(className):
             publisher_name = request.form.get('publisher' + str(i))
             teacher = Staff.query.filter_by(username=request.form.get('teacher' + str(i))).first()
             s = Subject(name = name,
-                        market_value = market_value,
-                        publisher_name = publisher_name,
-                        grade = grade,
-                        teacher = teacher)
+                    market_value = market_value,
+                    publisher_name = publisher_name,
+                    grade = grade,
+                    teacher = teacher)
             db.session.add(s)
-        #db.session.commit()
+        #db.session.commit() uncomment in production 
         flash('Succesfully added', 'message')
     return render_template('hod_templates/update_class.html', total_subject = total_subject, myTeacherList=TeacherList, classList = classList, currentClass = currentClass)
 
 @app.route('/updateClass', methods=["GET", "POST"])
 def updateClass():
+    ''' responsible to handle the form that change grade to ass differnt subject'''
     if request.method == "POST":
         className = request.form.get('searchClass')
         print(className)

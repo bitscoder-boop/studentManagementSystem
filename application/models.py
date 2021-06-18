@@ -21,9 +21,9 @@ class Grade(db.Model):
 
 
 ACCESS = {
-    'student': 0,
-    'staff':1
-}
+        'student': 0,
+        'staff':1
+        }
 
 class Student(db.Model):
     id = db.Column(db.Integer, primary_key = True)

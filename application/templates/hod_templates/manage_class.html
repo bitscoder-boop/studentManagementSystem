@@ -3,62 +3,62 @@
 Manage Class & Update Class Details
 {% endblock page_title %}
 {% block main_content %}
-    <!-- Main content -->
-    <section class="content">
-      <div class="container-fluid">
-            <div class="row">
-                <div class="col-md-12">
-                <!-- general form elements -->
-                <div class="card card-primary">
-                  <div class="card-header">
-                    <h3 class="card-title">Manage Class</h3>
-                    {% with messages = get_flashed_messages() %}
-                     {% if messages %}
-                        <div class="alert alert-success" role="alert">
-                        {% for message in messages %}
-                          <li>{{ message }}</li>
-                        {% endfor %}
-                        </div>
-                      {% endif %}
-                    {% endwith %}
-                  </div>
-                  <!-- /.card-header -->
-                  <!-- form start -->
-                  <form action="" method="post">
-                      {{ form.hidden_tag() }}
-                    <div class="card-body">
-                        <div class="form-group">
-                            {{ form.grade_number.label }}
-                            {{form.grade_number(placeholder="Class i.e. one, two", class="form-control")}}
-                            {% for error in form.grade_number.errors %}
-                                <div class = "alert alert-warning" role="alert">
-                                    {{ error }}
-                                </div>
-                            {% endfor %}
-                        </div>
-                        <div class="form-group">
-                            {{ form.total_subject_count.label }}
-                            {{form.total_subject_count(placeholder="Total Subject i.e. 7,8", class="form-control")}}
-                        </div>
-                        <div class="form-group">
-                            {{ form.class_teacher.label }}
-                            {{form.class_teacher(placeholder="Class Teacher", class="form-control")}}
-                            {% for error in form.class_teacher.errors %}
-                                <div class = "alert alert-warning" role="alert">
-                                    {{ error }}
-                                </div>
-                            {% endfor %}
-                        </div>
-                        <div class="card-footer">
-                            {{ form.submit(placeholder = "Add Class", class="btn btn-primary")}}
-                          <!--<button type="submit" class="btn btn-primary btn-block">Add Staff</button>-->
-                        </div>
-                    </div>
-                    <!-- /.card-body -->
-                <!-- /.card -->
-          </div>
-          </div>
-      </div>
-    </section>
-    <!-- /.content -->
+<!-- Main content -->
+<section class="content">
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-md-12">
+				<!-- general form elements -->
+				<div class="card card-primary">
+					<div class="card-header">
+						<h3 class="card-title">Manage Class</h3>
+						{% with messages = get_flashed_messages() %}
+						{% if messages %}
+						<div class="alert alert-success" role="alert">
+							{% for message in messages %}
+							<li>{{ message }}</li>
+							{% endfor %}
+						</div>
+						{% endif %}
+						{% endwith %}
+					</div>
+					<!-- /.card-header -->
+					<!-- form start -->
+					<form action="" method="post">
+						{{ form.hidden_tag() }}
+						<div class="card-body">
+							<div class="form-group">
+								{{ form.grade_number.label }}
+								{{form.grade_number(placeholder="Class i.e. one, two", class="form-control")}}
+								{% for error in form.grade_number.errors %}
+								<div class = "alert alert-warning" role="alert">
+									{{ error }}
+								</div>
+								{% endfor %}
+							</div>
+							<div class="form-group">
+								{{ form.total_subject_count.label }}
+								{{form.total_subject_count(placeholder="Total Subject i.e. 7,8", class="form-control")}}
+							</div>
+							<div class="form-group">
+								{{ form.class_teacher.label }}
+								{{form.class_teacher(placeholder="Class Teacher", class="form-control")}}
+								{% for error in form.class_teacher.errors %}
+								<div class = "alert alert-warning" role="alert">
+									{{ error }}
+								</div>
+								{% endfor %}
+							</div>
+							<div class="card-footer">
+								{{ form.submit(placeholder = "Add Class", class="btn btn-primary")}}
+								<!--<button type="submit" class="btn btn-primary btn-block">Add Staff</button>-->
+							</div>
+						</div>
+						<!-- /.card-body -->
+						<!-- /.card -->
+				</div>
+			</div>
+		</div>
+</section>
+<!-- /.content -->
 {% endblock main_content %}
