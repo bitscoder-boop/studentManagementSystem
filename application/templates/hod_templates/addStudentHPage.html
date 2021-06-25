@@ -1,6 +1,6 @@
 {% extends 'hod_templates/base_template.html' %}
 {% block page_title %}
-Add Staff
+Add Student
 {% endblock page_title %}
 {% block main_content %}
 <!-- Main content -->
@@ -11,7 +11,7 @@ Add Staff
 				<!-- general form elements -->
 				<div class="card card-primary">
 					<div class="card-header">
-						<h3 class="card-title">Add Staff</h3>
+						<h3 class="card-title">Add Student</h3>
 						{% with messages = get_flashed_messages() %}
 						{% if messages %}
 						<div class="alert alert-success" role="alert">
@@ -58,13 +58,6 @@ Add Staff
 							<span style="color: red;">[{{ error }}]</span>
 							{% endfor %}
 							<div class="form-group">
-								{{ form.email.label}}
-								{{ form.email(placeholder="Email", class="form-control")}}
-							</div>
-							{% for error in form.email.errors %}
-							<span style="color: red;">{{ error }}</span>
-							{% endfor %}
-							<div class="form-group">
 								{{ form.gender.label}}
 								{{ form.gender(placeholder="Gender", class="form-control")}}
 							</div>
@@ -72,17 +65,24 @@ Add Staff
 							<span style="color: red;">[{{ error }}]</span>
 							{% endfor %}
 							<div class="form-group">
-								{{ form.contact.label}}
-								{{ form.contact(placeholder="Contact Number ", class="form-control")}}
-							</div>
-							{% for error in form.contact.errors %}
-							<span style="color: red;">[{{ error }}]</span>
-							{% endfor %}
-							<div class="form-group">
 								{{ form.address.label}}
 								{{ form.address(placeholder="Address", class="form-control")}}
 							</div>
 							{% for error in form.address.errors %}
+							<span style="color: red;">[{{ error }}]</span>
+							{% endfor %}
+							<div class="form-group">
+								{{ form.email.label}}
+								{{ form.email(placeholder="Email", class="form-control")}}
+							</div>
+							{% for error in form.email.errors %}
+							<span style="color: red;">{{ error }}</span>
+							{% endfor %}
+							<div class="form-group">
+								{{ form.contact.label}}
+								{{ form.contact(placeholder="Contact Number ", class="form-control")}}
+							</div>
+							{% for error in form.contact.errors %}
 							<span style="color: red;">[{{ error }}]</span>
 							{% endfor %}
 							<div class="form-group">
@@ -100,10 +100,10 @@ Add Staff
 							<span style="color: red;">[{{ error }}]</span>
 							{% endfor %}
 							<div class="form-group">
-								{{ form.class_teacher.label}}
-								{{ form.class_teacher(placeholder="Class Teacher", class="form-control")}}
+								{{ form.current_grade.label}}
+								{{ form.current_grade(class="form-control")}}
 							</div>
-							{% for error in form.class_teacher.errors %}
+							{% for error in form.current_grade.errors %}
 							<span style="color: red;">[{{ error }}]</span>
 							{% endfor %}
 
@@ -111,8 +111,8 @@ Add Staff
 						<!-- /.card-body -->
 
 						<div class="card-footer">
-							<!--{{ form.submit(placeholder = "Add Staff", class="btn btn-primary btn-block")}} -->
-							<button type="submit" class="btn btn-primary btn-block">Add Staff Button</button>
+							{{ form.submit(placeholder = "Add Staff", class="btn btn-primary btn-block")}}
+							<!--<button type="submit" class="btn btn-primary btn-block">Add Staff</button>-->
 						</div>
 					</form>
 				</div>

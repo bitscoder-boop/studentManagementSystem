@@ -1,0 +1,43 @@
+{% extends 'hod_templates/base_template.html' %}
+{% block page_title %}
+<a href={{ url_for('addStudent') }}><button type='button' class="btn btn-primary btn-block" >Add Student</button></a>
+{% endblock page_title %}
+<!--create drop down menu here with select field--
+	{% block main_content %}
+	<!-- Main content -->
+	<section class="content">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-md-12">
+					<!-- general form elements -->
+					<!--Update class details -->
+					<div class="card card-primary">
+						<div class="card-header">
+							<h3 class="card-title">Check  Student Details</h3>
+						</div>
+						{% with messages = get_flashed_messages(category_filter=['message']) %}
+						{% if messages %}
+						<div class="alert alert-success alert-dismissible fade show" role="alert">
+							{% for message in messages %}
+							<li>{{ message }}</li>
+							{% endfor %}
+							<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						{% endif %}
+						{% endwith %}
+						<!-- /.card-header -->
+					</div>
+					<div >
+						Student Details are displayed here
+						Donot forget to include the table to display crud for each student including their class
+					</div>
+						<!-- /.card-header -->
+						<!-- /.card -->
+				</div>
+			</div>
+		</div>
+	</section>
+	<!-- /.content -->
+	{% endblock main_content %}

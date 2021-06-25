@@ -1,6 +1,6 @@
 {% extends 'hod_templates/base_template.html' %}
 {% block page_title %}
-Add Staff
+Edit Staff: {{ username }}
 {% endblock page_title %}
 {% block main_content %}
 <!-- Main content -->
@@ -24,16 +24,9 @@ Add Staff
 					</div>
 					<!-- /.card-header -->
 					<!-- form start -->
-					<form action="" method="post">
-						{{ form.hidden_tag() }}
+					<form action='' method="post">
+						{{ form.csrf_token }}
 						<div class="card-body">
-							<div class="form-group">
-								{{ form.username.label }}
-								{{form.username(placeholder="username", class="form-control")}}
-							</div>
-							{% for error in form.username.errors %}
-							<span style="color: red">{{ error }}</span>
-							{% endfor %}
 							<div class="form-group">
 								{{ form.first_name.label}}
 								{{ form.first_name(placeholder="First Name", class="form-control")}}
@@ -58,13 +51,6 @@ Add Staff
 							<span style="color: red;">[{{ error }}]</span>
 							{% endfor %}
 							<div class="form-group">
-								{{ form.email.label}}
-								{{ form.email(placeholder="Email", class="form-control")}}
-							</div>
-							{% for error in form.email.errors %}
-							<span style="color: red;">{{ error }}</span>
-							{% endfor %}
-							<div class="form-group">
 								{{ form.gender.label}}
 								{{ form.gender(placeholder="Gender", class="form-control")}}
 							</div>
@@ -86,20 +72,6 @@ Add Staff
 							<span style="color: red;">[{{ error }}]</span>
 							{% endfor %}
 							<div class="form-group">
-								{{ form.password.label}}
-								{{ form.password(placeholder="Password", class="form-control")}}
-							</div>
-							{% for error in form.password.errors %}
-							<span style="color: red;">[{{ error }}]</span>
-							{% endfor %}
-							<div class="form-group">
-								{{ form.password2.label}}
-								{{ form.password2(placeholder="Repeat Password", class="form-control")}}
-							</div>
-							{% for error in form.password2.errors %}
-							<span style="color: red;">[{{ error }}]</span>
-							{% endfor %}
-							<div class="form-group">
 								{{ form.class_teacher.label}}
 								{{ form.class_teacher(placeholder="Class Teacher", class="form-control")}}
 							</div>
@@ -111,8 +83,7 @@ Add Staff
 						<!-- /.card-body -->
 
 						<div class="card-footer">
-							<!--{{ form.submit(placeholder = "Add Staff", class="btn btn-primary btn-block")}} -->
-							<button type="submit" class="btn btn-primary btn-block">Add Staff Button</button>
+							<button type="submit" class="btn btn-primary btn-block">Update</button>
 						</div>
 					</form>
 				</div>

@@ -9,7 +9,7 @@ class Grade(db.Model):
     grade_number = db.Column(db.String(12), unique=True, nullable = False)
     students = db.relationship('Student', backref='grade')
     total_subject = db.Column(db.Integer)
-    classteachers = db.relationship('Staff', backref = 'class_teacher', uselist = False)
+    classteachers = db.relationship('Staff', backref = 'class_teacher', uselist = False )
     subjects = db.relationship('Subject', backref='grade')
 
     def assign_classTeacher(self, teacherName):
@@ -33,6 +33,8 @@ class Student(db.Model):
     username = db.Column(db.String(24), unique = True)
     gender = db.Column(db.String(12))
     address = db.Column(db.Text(length = 100))
+    email = db.Column(db.String(24), unique = False, nullable=True)
+    contact = db.Column(db.Integer, unique = True, nullable=True)
     seson_start_year = db.Column(db.DateTime, default = datetime.utcnow)
     password_hash = db.Column(db.String(128))
     role = db.Column(db.Integer, default= ACCESS['student'])

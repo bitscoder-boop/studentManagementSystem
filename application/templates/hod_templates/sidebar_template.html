@@ -14,7 +14,7 @@
 				<img src="{{ url_for('static', filename='dist/img/user2-160x160.jpg') }}" class="img-circle elevation-2" alt="User Image">
 			</div>
 			<div class="info">
-				<a href="#" class="d-block">Alexander Pierce</a>
+				<a href="#" class="d-block">Name Here</a>
 			</div>
 		</div>
 
@@ -24,10 +24,10 @@
 				<!-- Add icons to the links using the .nav-icon class
 	    with font-awesome or any other icon font library -->
 	    <li class="nav-item">
-		    <a href="{{ url_for('add_staff')}}" class="nav-link active">
+		    <a href="{{ url_for('manageStaff')}}" class="nav-link active">
 			    <i class="nav-icon fas fa-th"></i>
 			    <p>
-			    Add Staff
+			    Manage Staff
 			    <span class="right badge badge-danger">New</span>
 			    </p>
 		    </a>
@@ -37,6 +37,24 @@
 			    <i class="nav-icon fas fa-th"></i>
 			    <p>
 			    Manage Class
+			    <span class="right badge badge-danger">New</span>
+			    </p>
+		    </a>
+	    </li>
+	    <li class="nav-item">
+		    <a href="{{ url_for('updateClass')}}" class="nav-link active">
+			    <i class="nav-icon fas fa-th"></i>
+			    <p>
+			    Manage Subject
+			    <span class="right badge badge-danger">New</span>
+			    </p>
+		    </a>
+	    </li>
+	    <li class="nav-item">
+		    <a href="{{ url_for('manageStudent')}}" class="nav-link active">
+			    <i class="nav-icon fas fa-th"></i>
+			    <p>
+			    Manage Student
 			    <span class="right badge badge-danger">New</span>
 			    </p>
 		    </a>
