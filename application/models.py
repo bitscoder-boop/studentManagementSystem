@@ -50,6 +50,12 @@ class Student(db.Model):
         return f'<Student {self.username}>'
 
 
+
+subject_teacher = db.Table('subject_teacher', 
+        db.Column('staff_id', db.Integer, db.ForeignKey('staff.id')),
+        db.Column('subject_id', db.Integer, db.ForeignKey('subject.id'))
+        )
+
 class Staff(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     first_name = db.Column(db.String(24), index = True)
@@ -61,10 +67,10 @@ class Staff(db.Model):
     email = db.Column(db.String(24), unique = True)
     contact = db.Column(db.Integer, unique = True)
     seson_start_year = db.Column(db.DateTime, default = datetime.utcnow)
+    subjects = db.relationship("Subject", secondary="subject_teacher",                                  back_populates="teacher")
     grade_id = db.Column(db.Integer, db.ForeignKey('grade.id'), nullable = True)
     role = db.Column(db.Integer, default= ACCESS['staff'])
     password_hash = db.Column(db.String(128))
-    grade_subject = db.relationship('Subject', backref='teacher', uselist = False)
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -85,7 +91,7 @@ class Subject(db.Model):
     market_value = db.Column(db.Integer)
     publisher_name = db.Column(db.String(36))
     grade_id = db.Column(db.Integer, db.ForeignKey('grade.id'), nullable= False)
-    staff_id = db.Column(db.Integer, db.ForeignKey('staff.id'))
+    teacher = db.relationship("Staff", secondary="subject_teacher", back_populates="subjects")
 
 class Admin(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key = True)
