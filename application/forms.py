@@ -37,9 +37,13 @@ class AddStudentForm(FlaskForm):
 
 
 class AddStaffForm(FlaskForm):
-    classList = [i.grade_number for i in Grade.query.filter_by(classteachers=None).all()] # get all class names i.e. grade_number
-    classList = [ (i, i) for i in classList] # generate select options list
-    classList.insert(0, (None, 'Select One'))
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.class_teacher.choices = [
+                (i.grade_number , i.grade_number) for i in Grade.query.filter_by(classteachers=None).all()
+                ]
+        self.class_teacher.choices.insert(0, (None, 'Select Later'))
+
     username = StringField('Username', validators=[InputRequired(message = 'Required Field')])
     first_name = StringField('First Name', validators = [DataRequired()])
     middle_name = StringField('Middle Name',validators = [Optional()] )
@@ -51,7 +55,7 @@ class AddStaffForm(FlaskForm):
     password = PasswordField('Password', validators=[DataRequired()])
     password2 = PasswordField(
             'Repeat Password', validators=[DataRequired(), EqualTo('password')])
-    class_teacher = SelectField('Class Teacher Of', choices = classList, validators=[Optional()])
+    class_teacher = SelectField('Class Teacher Of', validators=[Optional()])
     submit = SubmitField('Add Staff')
 
     def validate_username(self, username):
@@ -77,9 +81,18 @@ class AddStaffForm(FlaskForm):
 
 
 class editStaffForm(FlaskForm): 
+    def __init__(self, value, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.class_teacher.choices = [
+                (i.grade_number, i.grade_number) for i in Grade.query.filter_by(classteachers=None).all()
+                ]
+        if value.class_teacher:
+            self.class_teacher.choices.insert(0, (value.class_teacher.grade_number, value.class_teacher.grade_number))
+            self.class_teacher.choices.insert(1, (None, 'Select Later'))
+        else:
+            self.class_teacher.choices.insert(0, (None, 'Select Later'))
+
     classList = [i.grade_number for i in Grade.query.filter_by(classteachers=None).all()] # get all class names i.e. grade_number
-    classList = [ (i, i) for i in classList] # generate select options list
-    classList.insert(0, (None, 'Select One'))
 
     first_name = StringField('First Name', validators = [DataRequired()])
     middle_name = StringField('Middle Name',validators = [Optional()] )
@@ -87,7 +100,7 @@ class editStaffForm(FlaskForm):
     gender = SelectField('Gender', choices = [('Male', 'Male'), ('Female', 'Female')], validators=[DataRequired()])
     contact = IntegerField('Phone', validators = [DataRequired()])
     address = StringField('Address', validators = [DataRequired(message = "Enter valid Phone Number")])
-    class_teacher = SelectField('Class Teacher Of', choices = classList, validators=[Optional()])
+    class_teacher = SelectField('Class Teacher Of', validators=[Optional()])
 
     def validate_contact(self, contact):
         contact_number = contact.data
@@ -97,23 +110,36 @@ class editStaffForm(FlaskForm):
         elif len(str(contact_number)) != 10:
             raise ValidationError('Phone Number are supposed to be 10 digits.')
 
-class ManageClassForm(FlaskForm):
+
+
+
+class addClassForm(FlaskForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.class_teacher.choices = [(x.username, x.username) for x in Staff.query.filter_by(class_teacher=None).all()]
+        self.class_teacher.choices.insert(0, (None, 'Select Later'))
+
     regexMessage = 'AlphaNumeric and Numeric Value not accepted!'
-
-    teacher_list = Staff.query.filter_by(class_teacher=None).all()
-    teacherselectList = [(x.username, x.username) for x in teacher_list]
-    teacherselectList.append(('', 'Select Later'))
-
     grade_number = StringField('Class', validators=[DataRequired(), Regexp("^\D+$", message = regexMessage)])
     total_subject_count = IntegerField('Total Subject', validators=[DataRequired()])
-    class_teacher = SelectField('ClassTeacher Name', choices = teacherselectList, default = '' , validators=[Optional()])
+    class_teacher = SelectField('ClassTeacher Name', validators=[Optional()])
     submit = SubmitField('Add Class')
 
 
 
-    def validate_grade_number(self, grade_number):
-        value = grade_number.data
-        classValueFromDatabase = Grade.query.filter_by(grade_number=value).first()
-        if classValueFromDatabase is not None:
-            raise ValidationError('Given class is already present in databse.')
+class editClassForm(FlaskForm):
+    def __init__(self, value,  *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.class_teacher.choices = [(x.username, x.username) for x in Staff.query.filter_by(class_teacher=None).all()]
+        if value.classteachers:
+            self.class_teacher.choices.insert(0, (value.classteachers.username, value.classteachers.username))
+            self.class_teacher.choices.insert(1, (None, 'Select Later'))
+        else:
+            self.class_teacher.choices.insert(0, (None, 'Select Later'))
+
+    regexMessage = 'AlphaNumeric and Numeric Value not accepted!'
+    grade_number = StringField('Class', validators=[DataRequired(), Regexp("^\D+$", message = regexMessage)])
+    total_subject_count = IntegerField('Total Subject', validators=[DataRequired()])
+    class_teacher = SelectField('ClassTeacher Name', validators=[Optional()])
+    submit = SubmitField('Add Class')
 

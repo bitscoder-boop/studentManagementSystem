@@ -1,0 +1,90 @@
+{% extends 'hod_templates/base_template.html' %}
+{% block page_title %}
+<a href={{ url_for('add_staff') }}><button type='button' class="btn btn-primary btn-block" >Add Staff</button></a>
+{% endblock page_title %}
+<!--create drop down menu here with select field--
+{% block main_content %}
+<!-- Main content -->
+    <section class="content">
+	<div class="container-fluid">
+	    <div class="row">
+		<div class="col-md-12">
+		    <!-- general form elements -->
+		    <!--Update class details -->
+		    <div class="card card-primary">
+			<div class="card-header">
+			    <h3 class="card-title">Staff Details</h3>
+			</div>
+			{% with messages = get_flashed_messages(category_filter=['message']) %}
+			{% if messages %}
+			<div class="alert alert-success alert-dismissible fade show" role="alert">
+			    {% for message in messages %}
+			    <li>{{ message }}</li>
+			    {% endfor %}
+			    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			    </button>
+			</div>
+			{% endif %}
+			{% endwith %}
+			<!-- /.card-header -->
+		    </div>
+		    <!--Staff Details are displayed here
+	  Donot forget to include the table to display crud for each staff including their class-->
+
+	  <!-- /.card-header -->
+	  <!-- /.card -->
+	  <table class="table table-hover table-sm .table-responsive">
+	      <thead>
+		  <tr>
+		      <th scope="col">#</th>
+		      <th score="col">Username</th>
+		      <th score="col">Full Name</th>
+		      <th score="col">Contact No.</th>
+		      <th score="col">Email</th>
+		      <th score="col">Class Teacher</th>
+		      <th score="col">Action</th>
+		  </tr>
+	      </thead>
+	      <tbody>
+		  {% for i in teacherData %}
+		  <tr> 
+		      <th scope="row">{{ loop.index }}</th>
+		      <td>{{ i.username }}</td>
+		      <td>{{ i.first_name|title +' '+ i.middle_name|title + ' ' + i.last_name|title }}</td>
+		      <td>{{ i.contact }}</td>
+		      <td>{{ i.email }}</td>
+		      <td>{{ i.class_teacher.grade_number  }}</td>
+		      <td>
+			  <div class="btn-group">
+			      <a href={{ url_for('editStaff', username=i.username) }}><button type="button" class="btn btn-outline-primary btn-sm">edit</button></a>&nbsp;
+			      <button type="button" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#warnModalCenter{{ loop.index|string }}">Delete</button>
+			      <div class="modal fade" id="warnModalCenter{{ loop.index|string }}" tabindex="-1" role="dialog" aria-labelledy="warnModalCenterTitle" aria-hidden="true">
+				  <div class="modal-dialog modal-dialog-centered" role="document">
+				      <div class="modal-content">
+					  <div class="modal-header">
+					      <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+					  </div>
+					  <div class="modal-body">
+					      <h5>Are you sure to delete it permanently?Once deleted it cannot be fetch again.</h5>
+					  </div>
+					  <div class="modal-footer">
+					      <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+					      <a href= "{{ url_for('deleteStaff', username=i.username) }}"><button type="button"  class="btn btn-danger">Delete</button></a>
+					  </div>
+				      </div>
+				  </div>
+			      </div>
+			  </div>
+		      </td>
+		  </tr>
+		  {% endfor %}
+	      </tbody>
+	  </table>
+		</div>
+	    </div>
+	</div>
+	</div>
+    </section>
+    <!-- /.content -->
+    {% endblock main_content %}

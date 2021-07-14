@@ -1,6 +1,6 @@
 from .import app
 from application import db
-from .forms import LoginForm, AddStudentForm, AddStaffForm, ManageClassForm, editStaffForm
+from .forms import LoginForm, AddStudentForm, AddStaffForm, addClassForm, editStaffForm, editClassForm
 from .models import Admin, Student, Staff, Grade, Subject 
 from flask_login import current_user, login_user, logout_user, login_required
 from flask import render_template, url_for, request, redirect, flash
@@ -17,10 +17,12 @@ def admin_login():
         return redirect(url_for('adminHomePage'))
     return render_template('login_page.html')
 
+
 @app.route('/admin_logout')
 def admin_logout():
     logout_user()
     return redirect(url_for('showDemoPage'))
+
 
 @app.route('/demo')
 def showDemoPage():
@@ -53,23 +55,23 @@ def add_staff():
         db.session.add(user) # uncomment on production
         db.session.commit()
         flash('Succesfully added staff.')
-    return render_template('hod_templates/add_staff_template.html', form=form)
+        return redirect(url_for('manageStaff'))
+    return render_template('hod_templates/staff/addStaff.html', form=form)
+# this is comment
+
 
 @app.route('/manageStaff')
 def manageStaff():
     '''responsible to show the table contaning all staff data'''
     teacherData = Staff.query.all()
-    return render_template('hod_templates/manageStaffHPage.html', teacherData = teacherData)
+    return render_template('hod_templates/staff/manageStaff.html', teacherData = teacherData)
+
+
 @app.route('/editStaff/<username>', methods=["GET", "POST"])
 def editStaff(username):
     '''edit profile of each staff'''
     currentStaff = Staff.query.filter_by(username=username).first()
-    print(currentStaff)
-    try: # if current teacher got class teacher role asigned
-        value = currentStaff.class_teacher.grade_number
-    except AttributeError:
-        value = ''
-    form = editStaffForm(class_teacher=value)
+    form = editStaffForm(value = currentStaff)
     if form.validate_on_submit(): #request.method == "POST":
         currentStaff.first_name = form.first_name.data
         currentStaff.middle_name = form.middle_name.data
@@ -81,6 +83,7 @@ def editStaff(username):
             currentStaff.assign_classTeaching(form.class_teacher.data)
         db.session.commit() 
         flash('Succesfully Edited')
+        return redirect(url_for('manageStaff'))
     if request.method == "GET": # prepopulate the form
         form.first_name.data = currentStaff.first_name
         form.middle_name.data = currentStaff.middle_name
@@ -88,8 +91,8 @@ def editStaff(username):
         form.gender.data = currentStaff.gender
         form.contact.data = currentStaff.contact
         form.address.data = currentStaff.address
-    print('Errors:' + str(form.errors))
-    return render_template('hod_templates/editStaffProfileHPage.html', form=form, username=username)
+    return render_template('hod_templates/staff/editStaff.html', form=form, username=username)
+
 
 @app.route('/deleteStaff/<username>', methods=["GET", "POST"])
 def deleteStaff(username):
@@ -100,10 +103,21 @@ def deleteStaff(username):
     flash(f'{username} deleted succesfullt')
     return redirect(url_for('manageStaff'))
 
-@app.route('/manage_class', methods = ['GET', 'POST'])
+
+##############################################
+########Class#################################
+##############################################
+
+@app.route('/manageClass')
 def manageClass():
+    classData = Grade.query.all()
+    return render_template('hod_templates/class/manageClass.html', classData = classData)
+
+
+@app.route('/addClass', methods = ['GET', 'POST'])
+def addClass():
     '''handle form that assign total subject and class teacher to each class'''
-    form = ManageClassForm()
+    form = addClassForm()
     if form.validate_on_submit():
         value = Grade(
                 grade_number = form.grade_number.data.lower(),
@@ -114,7 +128,46 @@ def manageClass():
         db.session.add(value) # uncomment in production
         db.session.commit()
         flash('Succesfully added class.')
-    return render_template('hod_templates/manage_class.html', form=form)
+    return render_template('hod_templates/class/addClass.html', form=form)
+
+
+@app.route('/editClass/<id>', methods = ['GET', 'POST'])
+def editClass(id):
+    g = Grade.query.get(id)
+    form = editClassForm(value=g)
+    if form.validate_on_submit():
+        g.grade_number = form.grade_number.data.lower()
+        g.total_subject = form.total_subject_count.data
+        if form.class_teacher.data == 'None':
+            g.classteachers = None
+        else:
+            g.classteachers = Staff.query.filter_by(username=str(form.class_teacher.data)).first()
+        db.session.commit()
+        flash('Succesfully added class.')
+        return redirect(url_for('manageClass'))
+    if request.method == 'GET':
+        form.grade_number.data = g.grade_number
+        form.total_subject_count.data = g.total_subject
+    return render_template('hod_templates/class/editClass.html', form=form) 
+
+
+@app.route('/deleteClass/<id>')
+def deleteClass(id):
+    grade_to_delete = Grade.query.filter_by(id=id)
+    grade_to_delete.delete()
+    db.session.commit()
+    flash('Succesfully Deleted')
+    return redirect(url_for('manageClass'))
+    
+    
+###############################################
+##################Subject######################
+###############################################
+
+
+##############################################
+####################SUBJECT###################
+##############################################
 
 @app.route('/updateSubject/<className>', methods = ['GET', 'POST'])
 def updateClassDetails(className):
