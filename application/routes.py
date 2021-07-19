@@ -94,6 +94,7 @@ def editStaff(username):
     return render_template('hod_templates/staff/editStaff.html', form=form, username=username)
 
 
+
 @app.route('/deleteStaff/<username>', methods=["GET", "POST"])
 def deleteStaff(username):
     '''delete the staff with given username'''
@@ -128,6 +129,7 @@ def addClass():
         db.session.add(value) # uncomment in production
         db.session.commit()
         flash('Succesfully added class.')
+        return redirect(url_for('manageClass'))
     return render_template('hod_templates/class/addClass.html', form=form)
 
 
@@ -158,21 +160,26 @@ def deleteClass(id):
     db.session.commit()
     flash('Succesfully Deleted')
     return redirect(url_for('manageClass'))
-    
-    
-###############################################
-##################Subject######################
-###############################################
 
 
 ##############################################
 ####################SUBJECT###################
 ##############################################
 
-@app.route('/updateSubject/<className>', methods = ['GET', 'POST'])
+@app.route('/manageSubjects', methods = ['GET', 'POST'])
+def manageSubjects():
+    ''' responsible to handle the form that change grade to add differnt subject'''
+    #if request.method == "POST":
+        #className = request.form.get('searchClass')
+        #return redirect(url_for('updateClassDetails', className=className))
+    classList = [i for i in Grade.query.all() if len(i.subjects) > 0] # get class grade name
+    return render_template('hod_templates/subjects/manageSubjects.html', classList = classList, currentClass = 'Select One')
+
+
+@app.route('/addSubjects/<className>', methods = ['GET', 'POST'])
 def updateClassDetails(className):
     '''add subject, subject Teacher to the given class''' 
-    TeacherList = [i.username for i in Staff.query.filter_by(grade_subject=None).all()]
+    TeacherList = [i.username for i in Staff.query.all()]
     classList = [i.grade_number for i in Grade.query.all()] # get class grade name
     currentClass = className
     try:
@@ -186,25 +193,21 @@ def updateClassDetails(className):
             name = request.form.get('subject' +str(i))
             market_value = request.form.get('price' + str(i))
             publisher_name = request.form.get('publisher' + str(i))
-            teacher = Staff.query.filter_by(username=request.form.get('teacher' + str(i))).first()
             s = Subject(name = name,
                     market_value = market_value,
                     publisher_name = publisher_name,
-                    grade = grade,
-                    teacher = teacher)
+                    grade = grade)
+            if request.form.get('teacher' + str(i)) is not None:
+                print(request.form.get('teacher' + str(i)))
+                teacher = Staff.query.filter_by(username=request.form.get('teacher' + str(i))).first()
+                s.teacher.append(teacher)
+            else:
+                print('Null')
             db.session.add(s)
         db.session.commit() #uncomment in production 
         flash('Succesfully added', 'message')
     return render_template('hod_templates/update_class.html', total_subject = total_subject, myTeacherList=TeacherList, classList = classList, currentClass = currentClass)
 
-@app.route('/updateSubject', methods=["GET", "POST"])
-def updateClass():
-    ''' responsible to handle the form that change grade to add differnt subject'''
-    classList = [i.grade_number for i in Grade.query.all()] # get class grade name
-    if request.method == "POST":
-        className = request.form.get('searchClass')
-        return redirect(url_for('updateClassDetails', className=className))
-    return render_template('hod_templates/manageSubjectHPage.html', classList = classList, currentClass = 'Select One')
 
 @app.route('/manageStudent')
 def manageStudent():
@@ -215,14 +218,14 @@ def addStudent():
     form = AddStudentForm()
     if form.validate_on_submit(): #csrf token must be avilable
         s = Student(username = form.username.data,
-                    first_name = form.first_name.data,
-                    middle_name = form.middle_name.data,
-                    last_name = form.last_name.data,
-                    gender = form.gender.data,
-                    address = form.address.data,
-                    email = form.email.data,
-                    contact = form.contact.data,
-                    grade = Grade.query.filter_by(grade_number = form.current_grade.data).first()
+                first_name = form.first_name.data,
+                middle_name = form.middle_name.data,
+                last_name = form.last_name.data,
+                gender = form.gender.data,
+                address = form.address.data,
+                email = form.email.data,
+                contact = form.contact.data,
+                grade = Grade.query.filter_by(grade_number = form.current_grade.data).first()
                 )
         s.set_password(form.password.data)
         db.session.add(s)

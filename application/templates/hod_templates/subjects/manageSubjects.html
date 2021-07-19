@@ -1,0 +1,70 @@
+{% extends 'hod_templates/base_template.html' %}
+{% block page_title %}
+Manage Subject
+{% include 'hod_templates/subjects/_searchClass.html' %}
+<!--create drop down menu here with select field-->
+{% endblock page_title %}
+{% block main_content %}
+<!-- Main content -->
+<section class="content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12">
+        <!-- general form elements -->
+        <!--Update class details -->
+        <div class="card card-primary">
+          <div class="card-header">
+            <h3 class="card-title">Check  Subject Details for each class</h3>
+          </div>
+          {% with messages = get_flashed_messages(category_filter=['message']) %}
+          {% if messages %}
+          <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {% for message in messages %}
+            <li>{{ message }}</li>
+            {% endfor %}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          {% endif %}
+          {% endwith %}
+          <!-- /.card-header -->
+        </div>
+        {% for class in classList %}
+        <b><h3>Grade:{{class.grade_number }}</h3></b>
+        <table class="table table-hover table-sm .table-responsive">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th score="col">Name</th>
+              <th score="col">Price</th>
+              <th score="col">Subject Teacher</th>
+              <th score="col">Publication</th>
+              <th score="col">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr> 
+              {% for subject in class.subjects %}
+              <th scope="row">{{ loop.index }}</th>
+              <td>{{ subject.name }}</td>
+              <td>Rs. {{ subject.market_value }}</td>
+              {% for teacher in subject.teacher %}
+              <td>{{ subject.teacher.first_name|title + ' ' +  subject.teacher.middle_|title+' ' + subject.teacher.last_name|title}}</td>
+              {% endfor %}
+              <td>{{subject.publisher_name }}</td>
+              <td>
+                <!--
+                 -->
+                </td>
+            </tr>
+          </tbody>
+          {% endfor %}
+        </table>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</section>
+<!-- /.content -->
+{% endblock main_content %}

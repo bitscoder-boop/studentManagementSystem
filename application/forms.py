@@ -10,7 +10,6 @@ class LoginForm(FlaskForm):
     remember_me = BooleanField('Remember Me')
     submit = SubmitField('Sign In')
 
-
 class AddStudentForm(FlaskForm):
     classList = [i.grade_number for i in Grade.query.all()] # get all class names i.e. grade_number
     classList = [ (i, i) for i in classList] # generate select options list
