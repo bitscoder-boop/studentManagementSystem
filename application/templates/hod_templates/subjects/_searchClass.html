@@ -1,9 +1,9 @@
 <form action={{ url_for('manageSubjects')}} method= "POST">
 	<select id="Select" class="form-control" name="searchClass">
-		<option selected disabled>{{currentClass.grade_number}}</option>
-		{% for data in classList %}
-		<option value={{ data.grade_number  }}>{{ data.grade_number }}</option>
+		<option selected disabled>{{currentClass}}</option>
+		{% for data in gradeList %}
+		<option value={{ data}}>{{ data}}</option>
 		{% endfor %}
 	</select>
-	<button type="submit" class="btn btn-primary btn-block">Search Class</button>    
+	<button type="submit" class="btn btn-primary btn-block">Add Subjects</button>    
 </form>                                                                                   

@@ -30,7 +30,7 @@ Update Class Details of Class {{ currentClass }}
           {% endwith %}
           <!-- /.card-header -->
           <!-- form start -->
-          <form action="{{ url_for('updateClassDetails', className = currentClass)}}" method="post">
+          <form action="{{ url_for('addSubjects', className = currentClass)}}" method="post">
             <div class="card-body">
               {% for scount in range(total_subject)%}
               <hr>

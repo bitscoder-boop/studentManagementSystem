@@ -71,12 +71,15 @@ class AddStaffForm(FlaskForm):
 
 
     def validate_contact(self, contact):
-        contact_number = contact.data
-        if type(contact_number) != int:
+        contact_number = Staff.query.filter_by(contact=contact.data).first() 
+        if type(contact.data) != int:
             raise ValidationError('Phone Number should be numeric value')
 
-        elif len(str(contact_number)) != 10:
+        elif len(str(contact.data)) != 10:
             raise ValidationError('Phone Number are supposed to be 10 digits.')
+
+        elif contact_number is not None:
+          raise ValidationError('Use different number')
 
 
 class editStaffForm(FlaskForm): 
@@ -102,12 +105,15 @@ class editStaffForm(FlaskForm):
     class_teacher = SelectField('Class Teacher Of', validators=[Optional()])
 
     def validate_contact(self, contact):
-        contact_number = contact.data
-        if type(contact_number) != int:
+        contact_number = Staff.query.filter_by(contact=contact.data).first() 
+        if type(contact.data) != int:
             raise ValidationError('Phone Number should be numeric value')
 
-        elif len(str(contact_number)) != 10:
+        elif len(str(contact.data)) != 10:
             raise ValidationError('Phone Number are supposed to be 10 digits.')
+
+        elif contact_number is not None:
+          raise ValidationError('Use different number')
 
 
 

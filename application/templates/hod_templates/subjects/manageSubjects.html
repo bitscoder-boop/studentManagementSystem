@@ -14,9 +14,9 @@ Manage Subject
         <!--Update class details -->
         <div class="card card-primary">
           <div class="card-header">
-            <h3 class="card-title">Check  Subject Details for each class</h3>
+            <h3 class="card-title">Subject</h3>
           </div>
-          {% with messages = get_flashed_messages(category_filter=['message']) %}
+          {% with messages = get_flashed_messages() %}
           {% if messages %}
           <div class="alert alert-success alert-dismissible fade show" role="alert">
             {% for message in messages %}
@@ -31,39 +31,59 @@ Manage Subject
           <!-- /.card-header -->
         </div>
         {% for class in classList %}
-        <b><h3>Grade:{{class.grade_number }}</h3></b>
-        <table class="table table-hover table-sm .table-responsive">
-          <thead>
-            <tr>
-              <th scope="col">#</th>
-              <th score="col">Name</th>
-              <th score="col">Price</th>
-              <th score="col">Subject Teacher</th>
-              <th score="col">Publication</th>
-              <th score="col">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr> 
-              {% for subject in class.subjects %}
-              <th scope="row">{{ loop.index }}</th>
-              <td>{{ subject.name }}</td>
-              <td>Rs. {{ subject.market_value }}</td>
-              {% for teacher in subject.teacher %}
-              <td>{{ subject.teacher.first_name|title + ' ' +  subject.teacher.middle_|title+' ' + subject.teacher.last_name|title}}</td>
+        <button type="button" class="btn btn-primary btn-sm">Grade:{{class.grade_number }}</button> &nbsp;
+        <button type="button" class="btn btn-outline-primary btn-sm">edit</button> &nbsp;
+        <button type="button" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#warnModalCenter{{ loop.index|string }}">delete</button>                                                                                               
+        <div class="modal fade" id="warnModalCenter{{ loop.index|string }}" tabindex="-1" role="dialog" aria-labelledy="warnModalCenterTitle" aria-hidden="true">                                                                                           
+          <div class="modal-dialog modal-dialog-centered" role="document">                                               
+            <div class="modal-content">                                                                                  
+              <div class="modal-header">                                                                                 
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>                    
+              </div>                                                                                                     
+              <div class="modal-body">                                                                                   
+                <h5>Are you sure to delete it permanently?Once deleted it cannot be fetch again.</h5>                    
+              </div>                                                                                                     
+              <div class="modal-footer">                                                                                 
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>                     
+                <a href= "{{ url_for('deleteSubjects', id=class.id) }}" class="btn btn-danger btn-sm">delete</a>
+              </div>                                                                                                  
+            </div>                                                                                                       
+          </div>                                                                                                         
+        </div>                                                                                                           
+      <table class="table table-hover table-sm .table-responsive">
+        <thead>
+          <tr>
+            <th scope="col" style="width:10%">#</th>
+            <th score="col" style="width:20%">Name</th>
+            <th score="col" style="width:10%">Price</th>
+            <th score="col" style="width:30%">Subject Teacher</th>
+            <th score="col" style="width:20%">Publication</th>
+            <th score="col" style="width:10%">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr> 
+            {% for subject in class.subjects %}
+            <th scope="row">{{ loop.index }}</th>
+            <td>{{ subject.name }}</td>
+            <td>Rs. {{ subject.market_value }}</td>
+            <td>
+              {%for teacher in subject.teacher %}
+            {{loop.index}}. {{ teacher.first_name|title + ' ' +  teacher.middle_name|title+' ' + teacher.last_name|title}}
               {% endfor %}
-              <td>{{subject.publisher_name }}</td>
-              <td>
-                <!--
-                 -->
-                </td>
-            </tr>
-          </tbody>
-          {% endfor %}
-        </table>
+            </td>
+            <td>{{subject.publisher_name }}</td>
+            <td>
+              <!--
+              -->
+            </td>
+          </tr>
+        </tbody>
         {% endfor %}
-      </div>
+      </table>
+      {% endfor %}
     </div>
+  </div>
   </div>
 </section>
 <!-- /.content -->

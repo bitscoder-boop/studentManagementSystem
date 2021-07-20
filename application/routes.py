@@ -169,15 +169,26 @@ def deleteClass(id):
 @app.route('/manageSubjects', methods = ['GET', 'POST'])
 def manageSubjects():
     ''' responsible to handle the form that change grade to add differnt subject'''
-    #if request.method == "POST":
-        #className = request.form.get('searchClass')
-        #return redirect(url_for('updateClassDetails', className=className))
+    if request.method == "POST":
+        className = request.form.get('searchClass')
+        return redirect(url_for('addSubjects', className=className))
     classList = [i for i in Grade.query.all() if len(i.subjects) > 0] # get class grade name
-    return render_template('hod_templates/subjects/manageSubjects.html', classList = classList, currentClass = 'Select One')
+    gradeList = [i.grade_number for i in Grade.query.all() if len(i.subjects) == 0]
+    return render_template('hod_templates/subjects/manageSubjects.html', classList = classList, currentClass = 'Select One', gradeList = gradeList)
+
+                #print(type(request.form.get('teacher' + str(i))))
+
+@app.route('/deleteSubjects/<id>')
+def deleteSubjects(id):
+    data = Subject.query.filter_by(grade=Grade.query.get(id))
+    data.delete()
+    db.session.commit()
+    flash('Succesfully deleted')
+    return redirect(url_for('manageSubjects'))
 
 
 @app.route('/addSubjects/<className>', methods = ['GET', 'POST'])
-def updateClassDetails(className):
+def addSubjects(className):
     '''add subject, subject Teacher to the given class''' 
     TeacherList = [i.username for i in Staff.query.all()]
     classList = [i.grade_number for i in Grade.query.all()] # get class grade name
@@ -193,20 +204,21 @@ def updateClassDetails(className):
             name = request.form.get('subject' +str(i))
             market_value = request.form.get('price' + str(i))
             publisher_name = request.form.get('publisher' + str(i))
-            s = Subject(name = name,
+            vars()['s'+str(i)] = Subject(name = name,
                     market_value = market_value,
                     publisher_name = publisher_name,
                     grade = grade)
-            if request.form.get('teacher' + str(i)) is not None:
-                print(request.form.get('teacher' + str(i)))
+            if request.form.get('teacher' + str(i)) != 'None':
+                teacher = 'None'
                 teacher = Staff.query.filter_by(username=request.form.get('teacher' + str(i))).first()
-                s.teacher.append(teacher)
+                vars()['s'+str(i)].teacher.append(teacher)
             else:
-                print('Null')
-            db.session.add(s)
+                pass
+            db.session.add(vars()['s'+str(i)])
         db.session.commit() #uncomment in production 
         flash('Succesfully added', 'message')
-    return render_template('hod_templates/update_class.html', total_subject = total_subject, myTeacherList=TeacherList, classList = classList, currentClass = currentClass)
+        return redirect(url_for('manageSubjects'))
+    return render_template('hod_templates/subjects/addSubjects.html', total_subject = total_subject, myTeacherList=TeacherList, classList = classList, currentClass = currentClass)
 
 
 @app.route('/manageStudent')
